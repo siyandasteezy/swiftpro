@@ -733,10 +733,71 @@
 
     footer a { color: var(--green); text-decoration: none; }
 
+    /* ── HAMBURGER ── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 6px;
+      transition: background .2s;
+    }
+
+    .nav-hamburger:hover { background: rgba(255,255,255,.1); }
+
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      nav { padding: 0 4%; }
-      .nav-links { display: none; }
+      nav { padding: 0 4%; position: relative; flex-wrap: wrap; height: auto; min-height: 68px; }
+
+      .nav-hamburger { display: flex; }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        gap: 0;
+        width: 100%;
+        background: var(--navy);
+        padding: 8px 0 16px;
+      }
+
+      .nav-links.open { display: flex; }
+
+      .nav-links li { width: 100%; }
+
+      .nav-links a {
+        display: block;
+        padding: 12px 16px;
+        font-size: 1rem;
+        border-radius: 8px;
+        margin: 2px 8px;
+      }
+
+      .nav-links a:hover { background: rgba(255,255,255,.08); color: var(--green); }
+
+      .nav-cta {
+        background: var(--green) !important;
+        margin: 8px 8px 0 !important;
+        text-align: center;
+      }
 
       .about-grid,
       .vm-grid,
@@ -746,6 +807,19 @@
       .about-image img { height: 280px; }
 
       section { padding: 64px 5%; }
+
+      .values-grid { grid-template-columns: 1fr 1fr; }
+
+      .hero-stats { gap: 28px; }
+    }
+
+    @media (max-width: 480px) {
+      .values-grid { grid-template-columns: 1fr; }
+      .cred-grid { grid-template-columns: 1fr; }
+      .partners-grid { grid-template-columns: 1fr 1fr; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .hero-stats { gap: 20px; }
+      .hero-stat-num { font-size: 1.5rem; }
     }
   </style>
 </head>
@@ -757,6 +831,9 @@
     <div class="nav-logo-mark">SP</div>
     <span class="nav-logo-text">SwiftPro</span>
   </a>
+  <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#services">Services</a></li>
@@ -1156,5 +1233,23 @@
   </p>
 </footer>
 
+<script>
+  const hamburger = document.querySelector('.nav-hamburger');
+  const navLinks = document.querySelector('.nav-links');
+
+  hamburger.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+  });
+
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', false);
+    });
+  });
+</script>
 </body>
 </html>
